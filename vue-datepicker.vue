@@ -555,7 +555,7 @@ exports.default = {
         this.checkBySelectDays(i, days);
       }
       if (firstDay === 0) firstDay = 7;
-      for (var _i = 0; _i < firstDay - (this.option.SundayFirst ? 0 : 1); _i++) {
+      for (var _i = 0; _i < firstDay - (this.option.SundayFirst ? 0 : 1) + 7 ; _i++) {
         var passiveDay = {
           value: previousMonth.daysInMonth() - _i,
           inMonth: false,
@@ -599,7 +599,7 @@ exports.default = {
           }
         }
       }
-      var passiveDaysAtFinal = 42 - days.length;
+      var passiveDaysAtFinal = 56 - days.length;
       for (var _i2 = 1; _i2 <= passiveDaysAtFinal; _i2++) {
         var _passiveDay = {
           value: _i2,
@@ -615,14 +615,8 @@ exports.default = {
     },
     getDay: function getDay(w,d) {
       // Return a day object based on the week and day of week index
-      var idx = (w-1)*(d-1)
-      if (idx < 0) {
-        // previous month
-      } else if (idx > 42) {
-        // next month
-      } else {
-        return this.dayList[(w-1)*(d-1)]
-      }
+      var idx = w*(d-1)
+      return this.dayList[w*(d-1)]
     },
     checkBySelectDays: function checkBySelectDays(d, days) {
       var _this = this;
