@@ -318,35 +318,48 @@ table {
     </div>
     <div class="datepicker-overlay" v-if="showInfo.check" @click="dismiss($event)" v-bind:style="{'background' : option.overlayOpacity? 'rgba(0,0,0,'+option.overlayOpacity+')' : 'rgba(0,0,0,0.5)'}">
       <div class="cov-date-body" :style="{'background-color': option.color ? option.color.header : '#3f51b5'}">
+      
         <div class="cov-date-monthly">
-          <div class="cov-date-previous" @click="nextMonth('pre')">«</div>
-          <div class="cov-date-caption" :style="{'color': option.color ? option.color.headerText : '#fff'}">
-            <span @click="showYear"><small>{{checked.year}}</small></span>
-            <br>
-            <span @click="showMonth">{{displayInfo.month}}</span>
+          <div class="cov-date-previous" tabindex="0" @click="nextMonth('pre')">
+            <span class="sr-only">Previous Month</span>«
           </div>
-          <div class="cov-date-next" @click="nextMonth('next')">»</div>
-        </div>
-        <div class="cov-date-box" v-if="showInfo.day">
-          <div class="cov-picker-box">
-            <div class="week">
-              <ul>
-                <li v-for="weekie in library.week">{{weekie}}</li>
-              </ul>
-            </div>
-            <div class="day" v-for="day in dayList" track-by="$index" @click="checkDay(day)" :class="{'checked':day.checked,'unavailable':day.unavailable,'passive-day': !(day.inMonth)}" :style="day.checked ? (option.color && option.color.checkedDay ? { background: option.color.checkedDay } : { background: '#F50057' }) : {}">{{day.value}}</div>
+          <div class="cov-date-caption" aria-live="assertive" aria-atomic="true"
+              :style="{'color': option.color ? option.color.headerText : '#fff'}"
+          >
+            {{displayInfo.month}} {{checked.year}}
+          </div>
+          <div class="cov-date-next" tabindex="0" @click="nextMonth('next')">
+            <span class="sr-only">Next Month</span>>»
           </div>
         </div>
-        <div class="cov-date-box list-box" v-if="showInfo.year">
-          <div class="cov-picker-box date-list" id="yearList">
-            <div class="date-item" v-for="yearItem in library.year" track-by="$index" @click="setYear(yearItem)">{{yearItem}}</div>
-          </div>
-        </div>
-        <div class="cov-date-box list-box" v-if="showInfo.month">
-          <div class="cov-picker-box date-list">
-            <div class="date-item" v-for="monthItem in library.month" track-by="$index" @click="setMonth(monthItem)">{{monthItem}}</div>
-          </div>
-        </div>
+        
+<!--        <div class="cov-date-box" v-if="showInfo.day"> -->
+<!--          <div class="cov-picker-box"> -->
+        <table tabindex="0">
+          <thead>
+            <tr class="week">
+              <th v-for="weekie in library.week">{{ weekie }}</th>
+            </tr>
+          </thead>
+          <tbody>
+           <tr v-for"w in 6">
+              <td v-for="d in 7" :key="w*d"
+                  @click="checkDay(getDay(w,d))"
+                  @keyup.space="checkDay(getDay(w,d))"
+                  @keyup.left="checkDay(getDay(w,d-1))"
+                  @keyup.right="checkDay(getDay(w,d+1))"
+                  @keyup.up="checkDay(getDay(w-1,d))"
+                  @keyup.down="checkDay(getDay(w+1,d))"
+                  :aria-selected="getDay(w,d).checked ? 'true' : 'false'"
+                  :class="{'checked':getDay(w,d).checked,'unavailable':getDay(w,d).unavailable,'passive-day': !(getDay(w,d).inMonth)}"
+                  :style="getDay(w,d).checked ? (option.color && option.color.checkedDay ? { background: option.color.checkedDay } : { background: '#F50057' }) : {}"
+              >
+                {{ dayList[(w-1)*(d-1)].value }}
+              </td>
+           </tr>
+          </tbody>
+        </table>
+
         <div class="cov-date-box list-box" v-if="showInfo.hour">
           <div class="cov-picker-box date-list">
             <div class="watch-box">
@@ -363,14 +376,17 @@ table {
             </div>
           </div>
         </div>
+        
         <div class="button-box">
-          <span @click="showInfo.check=false">{{option.buttons? option.buttons.cancel : 'Cancel' }}</span>
-          <span @click="picked">{{option.buttons? option.buttons.ok : 'Ok'}}</span>
+          <button tabindex="0" @click="showInfo.check=false">{{option.buttons? option.buttons.cancel : 'Cancel' }}</button>
+          <button tabindex="0" @click="picked">{{option.buttons? option.buttons.ok : 'Ok'}}</button>
         </div>
+        
       </div>
     </div>
   </div>
 </template>
+
 <script>
 'use strict';
 
@@ -396,10 +412,11 @@ exports.default = {
       default: function _default() {
         return {
           type: 'day',
-          SundayFirst: false,
-          week: ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'],
+          SundayFirst: true,
+          week: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],
+          weekLong: ['Sunday', 'Momday', 'Tuesday', 'Wednesday', 'Thhursday', 'Friday', 'Saturday'],
           month: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
-          format: 'YYYY-MM-DD',
+          format: 'YYYY/MM/DD',
           color: {
             checked: '#F50057',
             header: '#3f51b5',
@@ -474,6 +491,7 @@ exports.default = {
       },
       library: {
         week: this.option.week,
+        weekLong: this.option.weekLong,
         month: this.option.month,
         year: []
       },
@@ -594,6 +612,17 @@ exports.default = {
         days.push(_passiveDay);
       }
       this.dayList = days;
+    },
+    getDay: function getDay(w,d) {
+      // Return a day object based on the week and day of week index
+      var idx = (w-1)*(d-1)
+      if (idx < 0) {
+        // previous month
+      } else if (idx > 42) {
+        // next month
+      } else {
+        return this.dayList[(w-1)*(d-1)]
+      }
     },
     checkBySelectDays: function checkBySelectDays(d, days) {
       var _this = this;
