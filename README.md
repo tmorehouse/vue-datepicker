@@ -27,7 +27,7 @@ $ npm install vue-datepicker-aria
 ```html
 <script>
 // for Vue 2.0
-import myDatepicker from 'vue-datepicker'
+import myDatepicker from 'vue-datepicker-aria'
 
 export default {
   data () {
