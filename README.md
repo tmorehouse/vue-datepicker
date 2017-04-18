@@ -3,6 +3,8 @@ ARIA compliant Datepicker component for Vue.js 2.2.x
 
 **Note:** This repo is currently in development and is not complete!
 
+Based on https://github.com/hilongjw/vue-datepicker
+
 # Demo
 
 The demo page is [HERE](http://hilongjw.github.io/vue-datepicker/demo.html).
