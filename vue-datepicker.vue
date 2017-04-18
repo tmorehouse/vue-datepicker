@@ -3,7 +3,7 @@
   position: fixed;
   width: 100%;
   height: 100%;
-  z-index: 998;
+  z-index: 1050;
   top: 0;
   left: 0;
   overflow: hidden;
@@ -18,60 +18,40 @@
   animation: fadein 0.5s;
 }
 @keyframes fadein {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 /* Firefox < 16 */
 @-moz-keyframes fadein {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+  from { opacity: 0; }
+  to { opacity: 1;  }
 }
 /* Safari, Chrome and Opera > 12.1 */
 @-webkit-keyframes fadein {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 /* Internet Explorer */
 @-ms-keyframes fadein {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 /* Opera < 12.1 */
 @-o-keyframes fadein {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 .cov-date-body {
   background: #3F51B5;
   overflow: hidden;
   font-size: 16px;
-  font-family: 'Roboto';
+  font-family: 'Roboto', Arial, sans-serif;
   font-weight: 400;
   position: fixed;
   display: block;
-  width: 400px;
+  width: 350px;
   max-width: 100%;
-  z-index: 999;
+  z-index: 1052;
   top: 50%;
   left: 50%;
   -webkit-transform: translate(-50%, -50%);
@@ -88,7 +68,7 @@
   -moz-box-sizing: border-box !important;
   -webkit-box-sizing: border-box !important;
   -ms-box-sizing: border-box !important;
-  width: 400px;
+  width: 350px;
   max-width: 100%;
   height: 280px;
   text-align: start!important;
@@ -106,16 +86,15 @@
 .cov-picker-box td:hover {
   background: #E6E6E6;
 }
-table {
+.cov-date-body table {
   border-collapse: collapse;
   border-spacing: 0;
   width: 100%;
 }
-.day {
+.cov-date-body td.day,
+.cov-date-body tr.week th {
   width: 14.2857143%;
-  display: inline-block;
   text-align: center;
-  cursor: pointer;
   height: 34px;
   padding: 0;
   line-height: 34px;
@@ -123,28 +102,22 @@ table {
   background: #fff;
   vertical-align: middle;
 }
-.week ul {
-  margin: 0 0 8px;
-  padding: 0;
-  list-style: none;
+.cov-date-body td.day {
+  cursor: pointer;
 }
-.week ul li {
-  width: 14.2%;
-  display: inline-block;
-  text-align: center;
+.cov-date-body th.week {
   background: transparent;
-  color: #000;
   font-weight: bold;
 }
-.passive-day {
+.cov-date-body .passive-day {
   color: #bbb;
 }
-.checked {
+.cov-date-body .checked {
   background: #F50057;
   color: #FFF !important;
   border-radius: 3px;
 }
-.unavailable {
+.cov-date-body .unavailable {
   color: #ccc;
   cursor: not-allowed;
 }
@@ -183,15 +156,17 @@ table {
 .cov-date-next:hover {
   background: rgba(255, 255, 255, 0.1);
 }
-.day:hover {
+.cov-date-body .day:hover {
   background: #EAEAEA;
 }
-.unavailable:hover {
+.cov-date-body .unavailable:hover {
   background: none;
 }
-.checked:hover {
+.cov-date-body .checked:hover {
   background: #FF4F8E;
 }
+
+/* what is this for ??? */
 .cov-date-next::before,
 .cov-date-previous::before {
   width: 20px;
@@ -236,24 +211,12 @@ table {
   -moz-transform: rotate(-45deg);
   transform: rotate(-45deg);
 }
-.date-item {
-  text-align: center;
-  font-size: 20px;
-  padding: 10px 0;
-  cursor: pointer;
-}
-.date-item:hover {
-  background: #e0e0e0;
-}
-.date-list {
-  overflow: auto;
-  vertical-align: top;
-  padding: 0;
-}
+
 .cov-vue-date {
   display: inline-block;
   color: #5D5D5D;
 }
+
 .button-box {
   background: #fff;
   vertical-align: top;
@@ -262,70 +225,22 @@ table {
   text-align: right;
   padding-right: 20px;
 }
-.button-box span {
-  cursor: pointer;
-  padding: 10px 20px;
-}
-.watch-box {
-  height: 100%;
-  overflow: hidden;
-}
-.hour-box,
-.min-box {
-  display: inline-block;
-  width: 50%;
-  text-align: center;
-  height: 100%;
-  overflow: auto;
-  float: left;
-}
-.hour-box ul,
-.min-box ul {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-.hour-item,
-.min-item {
-  padding: 10px;
-  font-size: 36px;
-  cursor: pointer;
-}
-.hour-item:hover,
-.min-item:hover {
-  background: #E3E3E3;
-}
-.hour-box .active,
-.min-box .active {
-  background: #F50057;
-  color: #FFF !important;
-}
-::-webkit-scrollbar {
-  width: 2px;
-}
-::-webkit-scrollbar-track {
-  background: #E3E3E3;
-}
-::-webkit-scrollbar-thumb {
-  background: #C1C1C1;
-  border-radius: 2px;
-}
 </style>
+
 <template>
   <div class="cov-vue-date" :class="option.wrapperClass ? option.wrapperClass : {}">
-    <div class="datepickbox">
-      <input type="text" title="input date" class="cov-datepicker" readonly="readonly" :placeholder="option.placeholder" v-model="date.time" :required="required" @click="showCheck" @focus="showCheck" :style="option.inputStyle ? option.inputStyle : {}" :class="option.inputClass ? option.inputClass : {}"/>
-    </div>
+
     <div class="datepicker-overlay" 
         v-if="showInfo.check" 
         @click="dismiss($event)" 
         v-bind:style="{'background' : option.overlayOpacity? 'rgba(0,0,0,'+option.overlayOpacity+')' : 'rgba(0,0,0,0.5)'}"
     >
-      <div class="cov-date-body" 
-          :style="{'background-color': option.color ? option.color.header : '#3f51b5'}"
+      <div class="cov-date-body"
+          ref="picker"
+          role="application"
           aria-busy="false"
       >
-      
+
         <div class="cov-date-monthly">
           <div class="cov-date-previous" tabindex="0" @click="nextMonth('pre')">
             <span class="sr-only">Previous Month</span>«
@@ -335,47 +250,45 @@ table {
               role="heading"
               aria-live="assertive"
               aria-atomic="true"
-              :aria-activedecendant="????????"
-              :style="{'color': option.color ? option.color.headerText : '#fff'}"
+              :aria-activedecendant="makeId('cell_' + checked.id)"
           >
-            {{displayInfo.month}} {{checked.year}}
+             <small>{{checked.year}}</small>
+             <br>
+             {{displayInfo.month}}
           </div>
           <div class="cov-date-next" tabindex="0" @click="nextMonth('next')">
             <span class="sr-only">Next Month</span>>»
           </div>
         </div>
-        
-<!--        <div class="cov-date-box" v-if="showInfo.day"> -->
-<!--          <div class="cov-picker-box"> -->
+
         <table tabindex="0" role="grid" :aria-labeledby="makeId('month')">
           <thead>
-            <tr class="week">
-              <th v-for="(weekie, dd) in library.week" 
-                  :title="library.weekLong[dd]"
-                  :id="makeId('head_' + dd)"
-              >
-                {{ weekie }}
+            <tr class="week" :id="makeId('weekdays')">
+              <th v-for="(weekie, dd) in library.week" :id="makeId('weekdays_' + dd)">
+                <abbr title="library.weekLong[dd]">{{ weekie }}</abbr>
               </th>
             </tr>
           </thead>
-          <tbody>
+          <tbody 
+              ref="cal"
+              @click="dateClick($event)"
+              @keyup.left="moveLeft($event)"
+              @keyup.right="moveRight($event)"
+              @keyup.up="moveUp($event)"
+              @keyup.down="moveDown($event)"
+          >
            <tr v-for"w in 6" :id="makeId('row_' + w)">
               <!-- Not sure if the key events hould be here or on the table/table body -->
               <td v-for="d in 7" 
-                  :key="w+'_'+d"
                   tabindex="-1"
+                  class="day"
                   role="gridcell"
-                  :id="makeId('cell_' + w + '-' + d)"
-                  :headers="cov_head_' + _uid + '_' + d + ' cov_row_' + _uid + '_' + w"
+                  :key="w+'_'+d"
+                  :id="makeId('cell_' + getDay(w,d).id)"
+                  :data-idx="getDay(w,d).id"
+                  :headers="makeId('row_' + w) + ' ' + makeId('weekdays_' + d)"
                   :aria-selected="getDay(w,d).checked ? 'true' : 'false'"
                   :aria-disabled="getDay(w,d).unavailable ? 'true' : 'false'"
-                  @click="checkDay(getDay(w,d))"
-                  @keyup.space="checkDay(getDay(w,d))"
-                  @keyup.enter="checkDay(getDay(w,d))"
-                  @keyup.left="checkDay(getDay(w,d-1))"
-                  @keyup.right="checkDay(getDay(w,d+1))"
-                  @keyup.up="checkDay(getDay(w-1,d))"
-                  @keyup.down="checkDay(getDay(w+1,d))"
                   :class="{'checked':getDay(w,d).checked,'unavailable':getDay(w,d).unavailable,'passive-day': !(getDay(w,d).inMonth)}"
                   :style="getDay(w,d).checked ? (option.color && option.color.checkedDay ? { background: option.color.checkedDay } : { background: '#F50057' }) : {}"
               >
@@ -385,28 +298,15 @@ table {
           </tbody>
         </table>
 
-        <div class="cov-date-box list-box" v-if="showInfo.hour">
-          <div class="cov-picker-box date-list">
-            <div class="watch-box">
-              <div class="hour-box">
-                <div class="mui-pciker-rule mui-pciker-rule-ft"></div>
-                <ul>
-                  <li class="hour-item" v-for="hitem in hours" @click="setTime('hour', hitem, hours)" :class="{'active':hitem.checked}">{{hitem.value}}</li>
-                </ul>
-              </div>
-              <div class="min-box">
-                <div class="mui-pciker-rule mui-pciker-rule-ft"></div>
-                <div class="min-item" v-for="mitem in mins" @click="setTime('min',mitem, mins)" :class="{'active':mitem.checked}">{{mitem.value}}</div>
-              </div>
-            </div>
-          </div>
-        </div>
-        
         <div class="button-box">
-          <button tabindex="0" @click="showInfo.check=false">{{option.buttons? option.buttons.cancel : 'Cancel' }}</button>
-          <button tabindex="0" @click="picked">{{option.buttons? option.buttons.ok : 'Ok'}}</button>
+          <button tabindex="0" @click="showInfo.check=false" class="btn btn-default">
+            <slot name="cancel">Cancel</slot>
+          </button>
+          <button tabindex="0" @click="picked" class="btn btn-default">
+            <slot name="ok">Ok</slot>
+          </button>
         </div>
-        
+
       </div>
     </div>
   </div>
@@ -426,84 +326,9 @@ var _moment2 = _interopRequireDefault(_moment);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.default = {
-  props: {
-    required: false,
-    date: {
-      type: Object,
-      required: true
-    },
-    option: {
-      type: Object,
-      default: function _default() {
-        return {
-          type: 'day',
-          SundayFirst: true,
-          week: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],
-          weekLong: ['Sunday', 'Momday', 'Tuesday', 'Wednesday', 'Thhursday', 'Friday', 'Saturday'],
-          month: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
-          format: 'YYYY/MM/DD',
-          color: {
-            checked: '#F50057',
-            header: '#3f51b5',
-            headerText: '#fff'
-          },
-          wrapperClass: '',
-          inputClass: '',
-          inputStyle: {
-            'display': 'inline-block',
-            'padding': '6px',
-            'line-height': '22px',
-            'font-size': '16px',
-            'border': '2px solid #fff',
-            'box-shadow': '0 1px 3px 0 rgba(0, 0, 0, 0.2)',
-            'border-radius': '2px',
-            'color': '#5F5F5F'
-          },
-          placeholder: 'when?',
-          buttons: {
-            ok: 'OK',
-            cancel: 'Cancel'
-          },
-          overlayOpacity: 0.5,
-          dismissible: true
-        };
-      }
-    },
-    limit: {
-      type: Array,
-      default: function _default() {
-        return [];
-      }
-    }
-  },
+  
   data: function data() {
-    function hours() {
-      var list = [];
-      var hour = 24;
-      while (hour > 0) {
-        hour--;
-        list.push({
-          checked: false,
-          value: hour < 10 ? '0' + hour : hour
-        });
-      }
-      return list;
-    }
-    function mins() {
-      var list = [];
-      var min = 60;
-      while (min > 0) {
-        min--;
-        list.push({
-          checked: false,
-          value: min < 10 ? '0' + min : min
-        });
-      }
-      return list;
-    }
     return {
-      hours: hours(),
-      mins: mins(),
       showInfo: {
         hour: false,
         day: false,
@@ -527,11 +352,41 @@ exports.default = {
         month: '',
         day: '',
         hour: '00',
-        min: '00'
+        min: '00',
+        id: 0
       },
       dayList: [],
       selectedDays: []
     };
+  },
+  
+  props: {
+    required: false,
+    date: {
+      type: Object,
+      required: true
+    },
+    option: {
+      type: Object,
+      default: function _default() {
+        return {
+          SundayFirst: true,
+          week: ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'],
+          weekLong: ['Momday', 'Tuesday', 'Wednesday', 'Thhursday', 'Friday', 'Saturday', 'Sunday'],
+          month: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+          format: 'YYYY/MM/DD',
+          wrapperClass: '',
+          overlayOpacity: 0.5,
+          dismissible: true
+        };
+      }
+    },
+    limit: {
+      type: Array,
+      default: function _default() {
+        return [];
+      }
+    }
   },
 
   methods: {
@@ -539,14 +394,18 @@ exports.default = {
       n = Math.floor(n);
       return n < 10 ? '0' + n : n;
     },
+    
     makeId: function makeId(s) {
       return 'cov_' + this._uid + '_' + s;
     },
+    
     nextMonth: function nextMonth(type) {
-      var next = null;
-      type === 'next' ? next = (0, _moment2.default)(this.checked.currentMoment).add(1, 'M') : next = (0, _moment2.default)(this.checked.currentMoment).add(-1, 'M');
+      var next = (type === 'next') 
+        ? (0, _moment2.default)(this.checked.currentMoment).add(1, 'M')
+        : (0, _moment2.default)(this.checked.currentMoment).add(-1, 'M');
       this.showDay(next);
     },
+    
     showDay: function showDay(time) {
       if (time === undefined || !(0, _moment2.default)(time, this.option.format).isValid()) {
         this.checked.currentMoment = (0, _moment2.default)();
@@ -554,34 +413,42 @@ exports.default = {
         this.checked.currentMoment = (0, _moment2.default)(time, this.option.format);
       }
       this.showOne('day');
+      
       this.checked.year = (0, _moment2.default)(this.checked.currentMoment).format('YYYY');
       this.checked.month = (0, _moment2.default)(this.checked.currentMoment).format('MM');
       this.checked.day = (0, _moment2.default)(this.checked.currentMoment).format('DD');
       this.displayInfo.month = this.library.month[(0, _moment2.default)(this.checked.currentMoment).month()];
+
+      // Build the daysList
       var days = [];
       var currentMoment = this.checked.currentMoment;
       var firstDay = (0, _moment2.default)(currentMoment).date(1).day();
+
       // gettting previous and next month
       // let currentMonth = moment(currentMoment)
-      var previousMonth = (0, _moment2.default)(currentMoment);
-      var nextMonth = (0, _moment2.default)(currentMoment);
-      nextMonth.add(1, 'months');
-      previousMonth.subtract(1, 'months');
+      var previousMonth = (0, _moment2.default)(currentMoment).add(1, 'months');
+      var nextMonth = (0, _moment2.default)(currentMoment).subtract(1, 'months');
       var monthDays = (0, _moment2.default)(currentMoment).daysInMonth();
       var oldtime = this.checked.oldtime;
+      
+      // Generate dayList entries for current month
       for (var i = 1; i <= monthDays; ++i) {
         days.push({
           value: i,
           inMonth: true,
           unavailable: false,
           checked: false,
+          id: null,
           moment: (0, _moment2.default)(currentMoment).date(i)
         });
-        if (i === Math.ceil((0, _moment2.default)(currentMoment).format('D')) && (0, _moment2.default)(oldtime, this.option.format).year() === (0, _moment2.default)(currentMoment).year() && (0, _moment2.default)(oldtime, this.option.format).month() === (0, _moment2.default)(currentMoment).month()) {
+        if (i === Math.ceil((0, _moment2.default)(currentMoment).format('D'))
+            && (0, _moment2.default)(oldtime, this.option.format).year() === (0, _moment2.default)(currentMoment).year()
+            && (0, _moment2.default)(oldtime, this.option.format).month() === (0, _moment2.default)(currentMoment).month()) {
           days[i - 1].checked = true;
         }
-        this.checkBySelectDays(i, days);
       }
+      
+      // Add "passive" days at start of calendar list
       if (firstDay === 0) firstDay = 7;
       for (var _i = 0; _i < firstDay - (this.option.SundayFirst ? 0 : 1) + 7 ; _i++) {
         var passiveDay = {
@@ -590,17 +457,21 @@ exports.default = {
           action: 'previous',
           unavailable: false,
           checked: false,
+          id: null,
           moment: (0, _moment2.default)(currentMoment).date(1).subtract(_i + 1, 'days')
         };
         days.unshift(passiveDay);
       }
+      
       if (this.limit.length > 0) {
         var _iteratorNormalCompletion = true;
         var _didIteratorError = false;
         var _iteratorError = undefined;
 
         try {
-          for (var _iterator = this.limit[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+          for (var _iterator = this.limit[Symbol.iterator](), _step;
+              !(_iteratorNormalCompletion = (_step = _iterator.next()).done);
+              _iteratorNormalCompletion = true) {
             var li = _step.value;
 
             switch (li.type) {
@@ -627,6 +498,8 @@ exports.default = {
           }
         }
       }
+      
+      // Add "passive" days at end of calendar list
       var passiveDaysAtFinal = 56 - days.length;
       for (var _i2 = 1; _i2 <= passiveDaysAtFinal; _i2++) {
         var _passiveDay = {
@@ -635,26 +508,41 @@ exports.default = {
           action: 'next',
           unavailable: false,
           checked: false,
+          id: null,
           moment: (0, _moment2.default)(currentMoment).add(1, 'months').date(_i2)
         };
         days.push(_passiveDay);
       }
+      
+      // Add an ID for easy reference
+      days.forEach(function (x, _i3) {
+        x.id = _i3;
+      });
+      
+      // Set the new day list
       this.dayList = days;
     },
+    
+    beforeUpdate: function() {
+      this.$refs.picker.setAttribute('aria-busy','true');
+    }.
+    
+    afterUpdate: function() {
+      this.$refs.picker.setAttribute('aria-busy','false');
+    },
+    
+    // Get the selected day object based on the aria selector
+    getSelected: function getSelectedDay() {
+      var selected = this.$refs.cal.querySelector('[aria-selected="true"]')
+      return parseInt(this.dayList(selected.getAttribute('data-idx'), 10);
+    },
+    
+    // Return a day object based on the week and day of week index
     getDay: function getDay(w,d) {
-      // Return a day object based on the week and day of week index
-      var idx = w*(d-1)
-      return this.dayList[w*(d-1)]
+      var idx = w*7 + (d-1)
+      return this.dayList[idx]
     },
-    checkBySelectDays: function checkBySelectDays(d, days) {
-      var _this = this;
-
-      this.selectedDays.forEach(function (day) {
-        if (_this.checked.year === (0, _moment2.default)(day).format('YYYY') && _this.checked.month === (0, _moment2.default)(day).format('MM') && d === Math.ceil((0, _moment2.default)(day).format('D'))) {
-          days[d - 1].checked = true;
-        }
-      });
-    },
+    
     limitWeekDay: function limitWeekDay(limit, days) {
       days.map(function (day) {
         if (limit.available.indexOf(Math.floor(day.moment.format('d'))) === -1) {
@@ -663,6 +551,7 @@ exports.default = {
       });
       return days;
     },
+    
     limitFromTo: function limitFromTo(limit, days) {
       var _this2 = this;
 
@@ -675,6 +564,7 @@ exports.default = {
       }
       return days;
     },
+    
     getLimitCondition: function getLimitCondition(limit, day) {
       var tmpMoment = (0, _moment2.default)(this.checked.year + '-' + this.pad(this.checked.month) + '-' + this.pad(day.value));
       if (limit.from && !limit.to) {
@@ -685,181 +575,66 @@ exports.default = {
         return !tmpMoment.isBetween(limit.from, limit.to);
       }
     },
-    checkDay: function checkDay(obj) {
+    
+    clickDate: function(evt) {
+      // future: var idx = element.dataset.idx;  Not suppoted on IE < 11
+      // shim API available
+      var idx = evt.target.getAttribute('data-idx');
+      if (idx) {
+        this.selectDay(this.dayList[parseInt(idx,10)]);
+      }
+    },
+
+    keyLeft: function moveLeft(evt) {
+      this.selectDay(this.checkd.id - 1]);
+    },
+
+    keyRight: function moveRight(evt) {
+      this.selectDay(this.checkd.id + 1]);
+    },
+    
+    keyUp: function moveUp(evt) {
+      this.selectDay(this.checkd.id - 7]);
+    },
+
+    keyDown: function moveDown(evt) {
+      this.selectDay(this.checkd.id + 7]);
+    },
+    
+    selectDay: function(obj) {
       if (obj.unavailable || obj.value === '') {
         return false;
       }
       if (!obj.inMonth) {
         this.nextMonth(obj.action);
       }
-      if (this.option.type === 'day' || this.option.type === 'min') {
-        this.dayList.forEach(function (x) {
-          x.checked = false;
-        });
-        this.checked.day = this.pad(obj.value);
-        obj.checked = true;
-        // focus selected
-        
-      } else {
-        var day = this.pad(obj.value);
-        var ctime = this.checked.year + '-' + this.checked.month + '-' + day;
-        if (obj.checked === true) {
-          obj.checked = false;
-          var index = this.selectedDays.indexOf(ctime)
-          this.selectedDays.splice(index, 1)
-        } else {
-          this.selectedDays.push(ctime);
-          obj.checked = true;
-        }
-      }
-      switch (this.option.type) {
-        case 'day':
-          this.picked();
-          break;
-        case 'min':
-          this.showOne('hour');
-          // shift activated time items to visible position.
-          this.shiftActTime();
-          break;
-      }
-    },
-    showYear: function showYear() {
-      var _this3 = this;
-
-      var year = (0, _moment2.default)(this.checked.currentMoment).year();
-      this.library.year = [];
-      var yearTmp = [];
-      for (var i = year - 100; i < year + 5; ++i) {
-        yearTmp.push(i);
-      }
-      this.library.year = yearTmp;
-      this.showOne('year');
-      this.$nextTick(function () {
-        var listDom = document.getElementById('yearList');
-        listDom.scrollTop = listDom.scrollHeight - 100;
-        _this3.addYear();
+      this.dayList.forEach(function (x) {
+        x.checked = false;
       });
+      this.checked.day = this.pad(obj.value);
+      obj.checked = true;
+      // We want the user to click the "OK" button to select  
+      // this.picked();
     },
-    showOne: function showOne(type) {
-      switch (type) {
-        case 'year':
-          this.showInfo.hour = false;
-          this.showInfo.day = false;
-          this.showInfo.year = true;
-          this.showInfo.month = false;
-          break;
-        case 'month':
-          this.showInfo.hour = false;
-          this.showInfo.day = false;
-          this.showInfo.year = false;
-          this.showInfo.month = true;
-          break;
-        case 'day':
-          this.showInfo.hour = false;
-          this.showInfo.day = true;
-          this.showInfo.year = false;
-          this.showInfo.month = false;
-          break;
-        case 'hour':
-          this.showInfo.hour = true;
-          this.showInfo.day = false;
-          this.showInfo.year = false;
-          this.showInfo.month = false;
-          break;
-        default:
-          this.showInfo.day = true;
-          this.showInfo.year = false;
-          this.showInfo.month = false;
-          this.showInfo.hour = false;
-      }
-    },
-    showMonth: function showMonth() {
-      this.showOne('month');
-    },
-    addYear: function addYear() {
-      var _this4 = this;
-
-      var listDom = document.getElementById('yearList');
-      listDom.addEventListener('scroll', function (e) {
-        if (listDom.scrollTop < listDom.scrollHeight - 100) {
-          var len = _this4.library.year.length;
-          var lastYear = _this4.library.year[len - 1];
-          _this4.library.year.push(lastYear + 1);
-        }
-      }, false);
-    },
-    setYear: function setYear(year) {
-      this.checked.currentMoment = (0, _moment2.default)(year + '-' + this.checked.month + '-' + this.checked.day);
-      this.showDay(this.checked.currentMoment);
-    },
-    setMonth: function setMonth(month) {
-      var mo = this.library.month.indexOf(month) + 1;
-      if (mo < 10) {
-        mo = '0' + '' + mo;
-      }
-      this.checked.currentMoment = (0, _moment2.default)(this.checked.year + '-' + mo + '-' + this.checked.day);
-      this.showDay(this.checked.currentMoment);
-    },
+    
     showCheck: function showCheck() {
       if (this.date.time === '') {
         this.showDay();
       } else {
-        if (this.option.type === 'day' || this.option.type === 'min') {
-          this.checked.oldtime = this.date.time;
-          this.showDay(this.date.time);
-        } else {
-          this.selectedDays = JSON.parse(this.date.time);
-          if (this.selectedDays.length) {
-            this.checked.oldtime = this.selectedDays[0];
-            this.showDay(this.selectedDays[0]);
-          } else {
-            this.showDay();
-          }
-        }
+        this.checked.oldtime = this.date.time;
+        this.showDay(this.date.time);
       }
       this.showInfo.check = true;
     },
-    setTime: function setTime(type, obj, list) {
-      var _iteratorNormalCompletion2 = true;
-      var _didIteratorError2 = false;
-      var _iteratorError2 = undefined;
-
-      try {
-        for (var _iterator2 = list[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-          var item = _step2.value;
-
-          item.checked = false;
-          if (item.value === obj.value) {
-            item.checked = true;
-            this.checked[type] = item.value;
-          }
-        }
-      } catch (err) {
-        _didIteratorError2 = true;
-        _iteratorError2 = err;
-      } finally {
-        try {
-          if (!_iteratorNormalCompletion2 && _iterator2.return) {
-            _iterator2.return();
-          }
-        } finally {
-          if (_didIteratorError2) {
-            throw _iteratorError2;
-          }
-        }
-      }
-    },
+    
     picked: function picked() {
-      if (this.option.type === 'day' || this.option.type === 'min') {
-        var ctime = this.checked.year + '-' + this.checked.month + '-' + this.checked.day + ' ' + this.checked.hour + ':' + this.checked.min;
-        this.checked.currentMoment = (0, _moment2.default)(ctime, 'YYYY-MM-DD HH:mm');
-        this.date.time = (0, _moment2.default)(this.checked.currentMoment).format(this.option.format);
-      } else {
-        this.date.time = JSON.stringify(this.selectedDays);
-      }
+      var ctime = this.checked.year + '-' + this.checked.month + '-' + this.checked.day + ' ' + this.checked.hour + ':' + this.checked.min;
+      this.checked.currentMoment = (0, _moment2.default)(ctime, 'YYYY-MM-DD HH:mm');
+      this.date.time = (0, _moment2.default)(this.checked.currentMoment).format(this.option.format);
       this.showInfo.check = false;
       this.$emit('change', this.date.time);
     },
+    
     dismiss: function dismiss(evt) {
       if (evt.target.className === 'datepicker-overlay') {
         if (this.option.dismissible === undefined || this.option.dismissible) {
@@ -867,17 +642,8 @@ exports.default = {
           this.$emit('cancel');
         }
       }
-    },
-    shiftActTime: function shiftActTime() {
-      // shift activated time items to visible position.
-      this.$nextTick(function () {
-        if (!document.querySelector('.hour-item.active')) {
-          return false;
-        }
-        document.querySelector('.hour-box').scrollTop = (document.querySelector('.hour-item.active').offsetTop || 0) - 250;
-        document.querySelector('.min-box').scrollTop = (document.querySelector('.min-item.active').offsetTop || 0) - 250;
-      });
     }
+    
   }
 };
 </script>
