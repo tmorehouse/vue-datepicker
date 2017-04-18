@@ -1,14 +1,14 @@
 {
   "name": "vue-datepicker-aria",
   "version": "1.3.0",
-  "description": "ARIA compliant Datepicker component Vue.js 2.x ",
+  "description": "ARIA compliant Datepicker component Vue.js 2.2.x ",
   "main": "vue-datepicker-aria.vue",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/tmorehouse/vue-datepicker.git"
+    "url": "git+https://github.com/tmorehouse/vue-datepicker-aria.git"
   },
   "keywords": [
     "vue",
@@ -23,7 +23,8 @@
   },
   "homepage": "https://github.com/tmorehouse/vue-datepicker-aria#readme",
   "dependencies": {
-    "moment": "^2.11.1"
+    "moment": "^2.11.1",
+    "vue": "^2.2.0"
   },
   "browserify": {
     "transform": [
