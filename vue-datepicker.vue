@@ -316,14 +316,26 @@ table {
     <div class="datepickbox">
       <input type="text" title="input date" class="cov-datepicker" readonly="readonly" :placeholder="option.placeholder" v-model="date.time" :required="required" @click="showCheck" @focus="showCheck" :style="option.inputStyle ? option.inputStyle : {}" :class="option.inputClass ? option.inputClass : {}"/>
     </div>
-    <div class="datepicker-overlay" v-if="showInfo.check" @click="dismiss($event)" v-bind:style="{'background' : option.overlayOpacity? 'rgba(0,0,0,'+option.overlayOpacity+')' : 'rgba(0,0,0,0.5)'}">
-      <div class="cov-date-body" :style="{'background-color': option.color ? option.color.header : '#3f51b5'}">
+    <div class="datepicker-overlay" 
+        v-if="showInfo.check" 
+        @click="dismiss($event)" 
+        v-bind:style="{'background' : option.overlayOpacity? 'rgba(0,0,0,'+option.overlayOpacity+')' : 'rgba(0,0,0,0.5)'}"
+    >
+      <div class="cov-date-body" 
+          :style="{'background-color': option.color ? option.color.header : '#3f51b5'}"
+          aria-busy="false"
+      >
       
         <div class="cov-date-monthly">
           <div class="cov-date-previous" tabindex="0" @click="nextMonth('pre')">
             <span class="sr-only">Previous Month</span>«
           </div>
-          <div class="cov-date-caption" aria-live="assertive" aria-atomic="true"
+          <div class="cov-date-caption" 
+              :id="makeId('month')"
+              role="heading"
+              aria-live="assertive"
+              aria-atomic="true"
+              :aria-activedecendant="????????"
               :style="{'color': option.color ? option.color.headerText : '#fff'}"
           >
             {{displayInfo.month}} {{checked.year}}
@@ -335,26 +347,39 @@ table {
         
 <!--        <div class="cov-date-box" v-if="showInfo.day"> -->
 <!--          <div class="cov-picker-box"> -->
-        <table tabindex="0">
+        <table tabindex="0" role="grid" :aria-labeledby="makeId('month')">
           <thead>
             <tr class="week">
-              <th v-for="weekie in library.week">{{ weekie }}</th>
+              <th v-for="(weekie, dd) in library.week" 
+                  :title="library.weekLong[dd]"
+                  :id="makeId('head_' + dd)"
+              >
+                {{ weekie }}
+              </th>
             </tr>
           </thead>
           <tbody>
-           <tr v-for"w in 6">
-              <td v-for="d in 7" :key="w*d"
+           <tr v-for"w in 6" :id="makeId('row_' + w)">
+              <!-- Not sure if the key events hould be here or on the table/table body -->
+              <td v-for="d in 7" 
+                  :key="w+'_'+d"
+                  tabindex="-1"
+                  role="gridcell"
+                  :id="makeId('cell_' + w + '-' + d)"
+                  :headers="cov_head_' + _uid + '_' + d + ' cov_row_' + _uid + '_' + w"
+                  :aria-selected="getDay(w,d).checked ? 'true' : 'false'"
+                  :aria-disabled="getDay(w,d).unavailable ? 'true' : 'false'"
                   @click="checkDay(getDay(w,d))"
                   @keyup.space="checkDay(getDay(w,d))"
+                  @keyup.enter="checkDay(getDay(w,d))"
                   @keyup.left="checkDay(getDay(w,d-1))"
                   @keyup.right="checkDay(getDay(w,d+1))"
                   @keyup.up="checkDay(getDay(w-1,d))"
                   @keyup.down="checkDay(getDay(w+1,d))"
-                  :aria-selected="getDay(w,d).checked ? 'true' : 'false'"
                   :class="{'checked':getDay(w,d).checked,'unavailable':getDay(w,d).unavailable,'passive-day': !(getDay(w,d).inMonth)}"
                   :style="getDay(w,d).checked ? (option.color && option.color.checkedDay ? { background: option.color.checkedDay } : { background: '#F50057' }) : {}"
               >
-                {{ dayList[(w-1)*(d-1)].value }}
+                {{ getDay(w*(d-1)).value }}
               </td>
            </tr>
           </tbody>
@@ -514,6 +539,9 @@ exports.default = {
       n = Math.floor(n);
       return n < 10 ? '0' + n : n;
     },
+    makeId: function makeId(s) {
+      return 'cov_' + this._uid + '_' + s;
+    },
     nextMonth: function nextMonth(type) {
       var next = null;
       type === 'next' ? next = (0, _moment2.default)(this.checked.currentMoment).add(1, 'M') : next = (0, _moment2.default)(this.checked.currentMoment).add(-1, 'M');
@@ -670,6 +698,8 @@ exports.default = {
         });
         this.checked.day = this.pad(obj.value);
         obj.checked = true;
+        // focus selected
+        
       } else {
         var day = this.pad(obj.value);
         var ctime = this.checked.year + '-' + this.checked.month + '-' + day;
