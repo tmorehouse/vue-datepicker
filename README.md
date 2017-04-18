@@ -47,12 +47,6 @@ export default {
         overlayOpacity: 0.5, // 0.5 as default
         dismissible: true // as true as default
       },
-      timeoption: {
-        type: 'min',
-        week: ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'],
-        month: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
-        format: 'YYYY-MM-DD HH:mm'
-      },
       limit: [{
         type: 'weekday',
         available: [1, 2, 3, 4, 5]
