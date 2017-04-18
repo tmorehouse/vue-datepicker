@@ -243,29 +243,35 @@
 
         <div class="cov-date-monthly">
           <div class="cov-date-previous" tabindex="0" @click="nextMonth('pre')">
-            <span class="sr-only">Previous Month</span>«
+            <span class="sr-only"><slot name="gotoprev" Goto Previous Month</slot></span>
+            <span aria-hidden="true">&lt;</span>
           </div>
           <div class="cov-date-caption" 
               :id="makeId('month')"
               role="heading"
               aria-live="assertive"
               aria-atomic="true"
-              :aria-activedecendant="makeId('cell_' + checked.id)"
           >
              <small>{{checked.year}}</small>
              <br>
-             {{displayInfo.month}}
+             {{displayInfo.month}} {{checked.day}}
           </div>
           <div class="cov-date-next" tabindex="0" @click="nextMonth('next')">
-            <span class="sr-only">Next Month</span>>»
+            <span class="sr-only"><slot="gotonext">Goto Next Month</span></slot>
+            <span aria-hidden="true">&gt;</span>
           </div>
         </div>
 
-        <table tabindex="0" role="grid" :aria-labeledby="makeId('month')">
+        <table 
+            tabindex="0"
+            role="grid"
+            :aria-activedecendant="checked.id ? makeId('cell_' + checked.id) : ''"
+            :aria-labeledby="makeId('month')"
+        >
           <thead>
             <tr class="week" :id="makeId('weekdays')">
-              <th v-for="(weekie, dd) in library.week" :id="makeId('weekdays_' + dd)">
-                <abbr title="library.weekLong[dd]">{{ weekie }}</abbr>
+              <th v-for="(wday, wd) in library.week" :id="makeId('weekdays_' + (wd+1))">
+                <abbr title="library.weekLong[wd]">{{ wday }}</abbr>
               </th>
             </tr>
           </thead>
@@ -278,7 +284,6 @@
               @keyup.down="moveDown($event)"
           >
            <tr v-for"w in 6" :id="makeId('row_' + w)">
-              <!-- Not sure if the key events hould be here or on the table/table body -->
               <td v-for="d in 7" 
                   tabindex="-1"
                   class="day"
@@ -290,9 +295,8 @@
                   :aria-selected="getDay(w,d).checked ? 'true' : 'false'"
                   :aria-disabled="getDay(w,d).unavailable ? 'true' : 'false'"
                   :class="{'checked':getDay(w,d).checked,'unavailable':getDay(w,d).unavailable,'passive-day': !(getDay(w,d).inMonth)}"
-                  :style="getDay(w,d).checked ? (option.color && option.color.checkedDay ? { background: option.color.checkedDay } : { background: '#F50057' }) : {}"
               >
-                {{ getDay(w*(d-1)).value }}
+                {{ getDay(w,d).value }}
               </td>
            </tr>
           </tbody>
@@ -362,19 +366,25 @@ exports.default = {
   
   props: {
     required: false,
+    value: { // For v-model
+      type: String // yyyy-mm-dd format
+    },
+    // This will be replaced by above.  Need to parse on load/save
     date: {
       type: Object,
       required: true
     },
+    // Change option to individual props for better binding
     option: {
       type: Object,
       default: function _default() {
         return {
           SundayFirst: true,
+          // merge week & weekLong intarray of objects as weekdays
           week: ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'],
           weekLong: ['Momday', 'Tuesday', 'Wednesday', 'Thhursday', 'Friday', 'Saturday', 'Sunday'],
           month: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
-          format: 'YYYY/MM/DD',
+          format: 'YYYY-MM-DD',
           wrapperClass: '',
           overlayOpacity: 0.5,
           dismissible: true
@@ -399,6 +409,7 @@ exports.default = {
       return 'cov_' + this._uid + '_' + s;
     },
     
+    // Simplify the moment2 calls into a helper function
     nextMonth: function nextMonth(type) {
       var next = (type === 'next') 
         ? (0, _moment2.default)(this.checked.currentMoment).add(1, 'M')
@@ -412,7 +423,6 @@ exports.default = {
       } else {
         this.checked.currentMoment = (0, _moment2.default)(time, this.option.format);
       }
-      this.showOne('day');
       
       this.checked.year = (0, _moment2.default)(this.checked.currentMoment).format('YYYY');
       this.checked.month = (0, _moment2.default)(this.checked.currentMoment).format('MM');
@@ -531,12 +541,6 @@ exports.default = {
       this.$refs.picker.setAttribute('aria-busy','false');
     },
     
-    // Get the selected day object based on the aria selector
-    getSelected: function getSelectedDay() {
-      var selected = this.$refs.cal.querySelector('[aria-selected="true"]')
-      return parseInt(this.dayList(selected.getAttribute('data-idx'), 10);
-    },
-    
     // Return a day object based on the week and day of week index
     getDay: function getDay(w,d) {
       var idx = w*7 + (d-1)
@@ -612,6 +616,7 @@ exports.default = {
         x.checked = false;
       });
       this.checked.day = this.pad(obj.value);
+      this.checked.id = obj.id;
       obj.checked = true;
       // We want the user to click the "OK" button to select  
       // this.picked();
